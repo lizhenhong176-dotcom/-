@@ -29,6 +29,10 @@ class HALLoader:
         """确保 HAL 解析插件已加载 (verilog_parser, hgl_parser 等)。"""
         if self._plugins_loaded:
             return
+        # 注册插件目录到 sys.path，使 tools/ 可直接 import dataflow/graph_algorithm 等
+        import sys
+        if PLUGIN_DIR not in sys.path:
+            sys.path.insert(0, PLUGIN_DIR)
         hal_py.plugin_manager.load_all_plugins([PLUGIN_DIR])
         self._plugins_loaded = True
         names = hal_py.plugin_manager.get_plugin_names()

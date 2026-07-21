@@ -6,10 +6,8 @@ API 经 check_plugins.py 验证。
 """
 from __future__ import annotations
 
-import sys
+from collections import deque
 from typing import Any
-
-sys.path.insert(0, "/home/i/hal/build/lib/hal_plugins/")
 
 
 class FSMTool:
@@ -20,19 +18,23 @@ class FSMTool:
 
     def extract_fsms(self, netlist,
                      state_regs: list | None = None,
-                     transition_logic: list | None = None) -> dict | None:
+                     transition_logic: list | None = None,
+                     max_transition_gates: int = 500) -> dict | None:
         """
         提取 FSM 状态转换图。
         返回 {state: {next_state: BooleanFunction}} 或 None。
+        max_transition_gates: brute-force 的 transition logic 上限，超出则截断。
         """
         import solve_fsm
 
         if state_regs is None:
-            # 自动找所有 DFF 作为候选状态寄存器
             state_regs = [g for g in netlist.get_gates()
                           if "DFF" in g.get_type().get_name().upper()]
         if transition_logic is None:
             transition_logic = list(netlist.get_gates())
+        if len(transition_logic) > max_transition_gates:
+            # ponytail: brute-force 门数过多时截断，避免组合爆炸
+            transition_logic = transition_logic[:max_transition_gates]
 
         return solve_fsm.solve_fsm_brute_force(
             netlist, state_regs, transition_logic)
@@ -65,10 +67,10 @@ class FSMTool:
 
         all_states = set(transition_dict.keys())
         reachable = set()
-        queue = [initial_state]
+        queue = deque([initial_state])
 
         while queue:
-            s = queue.pop(0)
+            s = queue.popleft()
             if s in reachable:
                 continue
             if s not in transition_dict:

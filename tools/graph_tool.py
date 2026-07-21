@@ -6,10 +6,7 @@ API 经 check_plugins.py 验证。
 """
 from __future__ import annotations
 
-import sys
 from typing import Any
-
-sys.path.insert(0, "/home/i/hal/build/lib/hal_plugins/")
 
 
 class GraphTool:

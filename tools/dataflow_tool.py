@@ -6,10 +6,8 @@ API 经 check_plugins.py 验证。
 """
 from __future__ import annotations
 
-import sys
+from collections import deque
 from typing import Any
-
-sys.path.insert(0, "/home/i/hal/build/lib/hal_plugins/")
 
 
 class DataflowTool:
@@ -70,9 +68,9 @@ class DataflowTool:
         """ponytail: BFS 遍历 successors 找到所有终点。"""
         sinks = []
         visited = set()
-        queue = [start_gate]
+        queue = deque([start_gate])
         while queue:
-            g = queue.pop(0)
+            g = queue.popleft()
             gid = id(g)
             if gid in visited:
                 continue
