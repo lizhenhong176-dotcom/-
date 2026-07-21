@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass, field
 
 
@@ -70,10 +71,10 @@ def _trace_cone(start_net, max_depth: int) -> LogicCone:
     """反向追踪单个逻辑锥 (BFS)。"""
     cone = LogicCone(root_signal="")
     visited = set()
-    queue = [(start_net, 0)]
+    queue = deque([(start_net, 0)])
 
     while queue:
-        net, depth = queue.pop(0)
+        net, depth = queue.popleft()
         if depth > max_depth:
             continue
 
@@ -96,8 +97,7 @@ def _trace_cone(start_net, max_depth: int) -> LogicCone:
                 cone.ff_count += 1
 
             for next_net in gate.get_fan_in_nets():
-                if next_net:
-                    queue.append((next_net, depth + 1))
+                queue.append((next_net, depth + 1))
 
     return cone
 
@@ -106,10 +106,10 @@ def _trace_forward_cone(start_net, max_depth: int) -> LogicCone:
     """前向追踪单个逻辑锥 (BFS)。"""
     cone = LogicCone(root_signal="")
     visited = set()
-    queue = [(start_net, 0)]
+    queue = deque([(start_net, 0)])
 
     while queue:
-        net, depth = queue.pop(0)
+        net, depth = queue.popleft()
         if depth > max_depth:
             continue
 
@@ -131,7 +131,6 @@ def _trace_forward_cone(start_net, max_depth: int) -> LogicCone:
                 cone.ff_count += 1
 
             for next_net in gate.get_fan_out_nets():
-                if next_net:
-                    queue.append((next_net, depth + 1))
+                queue.append((next_net, depth + 1))
 
     return cone

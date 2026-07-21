@@ -63,6 +63,8 @@ class Executor:
             "uart_strategy": self._run_strategy,
             "crypto_strategy": self._run_strategy,
             "fsm_strategy": self._run_strategy,
+            "dataflow_strategy": self._run_strategy,
+            "output_cone_strategy": self._run_strategy,
         }
 
         handler = tool_map.get(step.tool)
