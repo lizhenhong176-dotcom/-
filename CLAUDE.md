@@ -21,7 +21,10 @@ RTL → Yosys综合 → 门级网表 → HAL加载 →
 ```
 
 ## 关键文件
-- `hal/hal_loader.py`: HAL 网表加载器
+- `hal/loader.py`: HAL 网表加载器
+- `hal/query.py`: HAL 查询工具函数
+- `hal/plugins.py`: HAL 插件管理
+- `analyze.py`: Phase 1 CLI 入口 (分析 + 报告)
 - `agent/router.py`: 策略路由器
 - `tools/`: HAL 插件封装层
 - `strategies/`: 各类型木马检测策略

@@ -33,16 +33,22 @@ class AnalysisPlan:
 
     def sorted_steps(self) -> list[AnalysisStep]:
         """按依赖关系排序步骤。"""
-        # ponytail: 简单拓扑排
         done = set()
         ordered = []
         remaining = list(self.steps)
+        # ponytail: 最多 100 次迭代，防止循环依赖导致死循环
+        max_iter = len(remaining) * len(remaining) + 1
         while remaining:
+            made_progress = False
             for step in list(remaining):
                 if all(d in done for d in step.depends_on):
                     ordered.append(step)
                     done.add(step.name)
                     remaining.remove(step)
+                    made_progress = True
+            max_iter -= 1
+            if max_iter <= 0:
+                raise RuntimeError(f"Circular or missing dependency in steps: {[s.name for s in remaining]}")
         return ordered
 
 

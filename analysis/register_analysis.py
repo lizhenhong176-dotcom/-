@@ -19,6 +19,7 @@ class RegisterInfo:
     reset_net: str | None = None
     d_input_net: str | None = None
     q_output_net: str | None = None
+    fan_in_nets: list[str] = field(default_factory=list)
     is_toggling: bool | None = None
     fanout: int = 0
     notes: list[str] = field(default_factory=list)
@@ -73,6 +74,7 @@ def _find_all_registers(netlist) -> list[RegisterInfo]:
             reg = RegisterInfo(
                 name=gate.get_name(),
                 gate_type=gate.get_type().get_name(),
+                fan_in_nets=[n.get_name() for n in fan_in_nets],
             )
 
             # ponytail: pin names not available via HAL API directly;

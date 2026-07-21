@@ -52,7 +52,7 @@ def print_report(netlist, modules, gates, registers, nets, cones, design_name, l
     # --- Registers ---
     print(f"\n--- Registers ({registers['total_registers']}) ---")
     for r in registers["registers"][:10]:
-        print(f"  {r.name:35s} {r.gate_type:12s} fan_in={len(_fan_in_nets(r, netlist))}  fan_out={r.fanout}")
+        print(f"  {r.name:35s} {r.gate_type:12s} fan_in={len(r.fan_in_nets)}  fan_out={r.fanout}")
     if registers["total_registers"] > 10:
         print(f"  ... ({registers['total_registers'] - 10} more)")
 
@@ -107,7 +107,7 @@ def build_json(netlist, modules, gates, registers, nets, cones, design_name, lib
             {
                 "name": r.name,
                 "type": r.gate_type,
-                "fan_in": len(_fan_in_nets(r, netlist)),
+                "fan_in": len(r.fan_in_nets),
                 "fan_out": r.fanout,
             }
             for r in registers["registers"]
@@ -126,15 +126,6 @@ def build_json(netlist, modules, gates, registers, nets, cones, design_name, lib
             "outputs": [p.get_name() for p in outputs],
         },
     }
-
-
-def _fan_in_nets(reg_info, netlist):
-    """从网表中找到对应门并获取扇入网表。"""
-    from hal.query import get_gate_by_name, get_fan_in
-    gate = get_gate_by_name(netlist, reg_info.name)
-    if gate:
-        return get_fan_in(gate)
-    return []
 
 
 def main(netlist_path: str):

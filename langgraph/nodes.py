@@ -20,7 +20,7 @@ def load_netlist_node(state: AgentState) -> AgentState:
     loader = HALLoader(state["config"])
     try:
         netlist = loader.load_netlist(state["netlist_path"])
-        loader.load_plugins()
+        loader.load_analysis_plugins()
         state["netlist"] = netlist
     except Exception as e:
         state["error"] = f"Netlist load failed: {e}"

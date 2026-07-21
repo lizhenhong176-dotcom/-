@@ -76,3 +76,9 @@ class StrategyRouter:
             {"name": s.name, "description": s.description}
             for s in self._instances.values()
         ]
+
+    def get_strategy(self, name: str) -> BaseStrategy:
+        """按名称获取策略实例。"""
+        if name not in self._instances:
+            raise KeyError(f"Strategy not found: {name}")
+        return self._instances[name]

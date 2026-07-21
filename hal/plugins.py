@@ -23,6 +23,7 @@ class Plugins:
         "netlist_simulator",
         "hawkeye",
         "z3_utils",
+        "boolean_influence",
     ]
 
     def __init__(self):
@@ -68,3 +69,5 @@ class Plugins:
     def hawkeye(self):            return self.get("hawkeye")
     @property
     def z3(self):                 return self.get("z3_utils")
+    @property
+    def boolean_influence(self):  return self.get("boolean_influence")

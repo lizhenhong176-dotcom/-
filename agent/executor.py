@@ -92,9 +92,5 @@ class Executor:
         return analyze_cones(netlist)
 
     def _run_strategy(self, netlist, step):
-        # 通过 router 找到对应策略并执行
-        strategies = self.router._instances
-        strategy = strategies.get(step.tool)
-        if strategy is None:
-            raise ValueError(f"Strategy not found: {step.tool}")
+        strategy = self.router.get_strategy(step.tool)
         return strategy.analyze(netlist)
