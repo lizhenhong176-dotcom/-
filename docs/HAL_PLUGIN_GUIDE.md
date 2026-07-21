@@ -68,3 +68,60 @@ result = pm.load_all()      # 返回 {"dataflow": True, "solve_fsm": True, ...}
 df = pm.dataflow            # 便捷属性访问
 fsm = pm.fsm
 ```
+
+## 已验证插件 API (Phase 2)
+
+插件 `.so` 通过 `hal_py.plugin_manager.load_all_plugins()` 注册后，
+**需单独 `__import__()` 导入以获取 Python API**：
+
+```python
+import hal_py
+hal_py.plugin_manager.load_all_plugins(["/home/i/hal/build/lib/hal_plugins/"])
+# 加载网表后：
+import graph_algorithm as ga
+import dataflow
+import solve_fsm
+```
+
+### graph_algorithm (100% 验证通过)
+
+| API | 签名 |
+|-----|------|
+| `NetlistGraph.from_netlist` | `(Netlist, bool=False, filter=None) → NetlistGraph` |
+| `graph.get_num_vertices` | `(only_connected=False) → int` |
+| `graph.get_num_edges` | `() → int` |
+| `graph.get_vertex_from_gate` | `(Gate) → int` |
+| `graph.get_gate_from_vertex` | `(int) → Gate` |
+| `get_connected_components` | `(graph, strong, min_size=0) → list[list[int]]` |
+| `get_neighborhood` | `(graph, list[Gate], order, Direction, min_dist=0) → list[list[int]]` |
+| `get_shortest_paths` | `(graph, from_gate, list[Gate], Direction) → list[list[int]]` |
+| `get_subgraph` | `(graph, list[Gate]) → NetlistGraph` |
+| `Direction` enum | `NONE, IN, OUT, ALL` (on `NetlistGraph.Direction`) |
+
+### dataflow (DANA) (API 正确，小设计可能返回 None)
+
+| API | 签名 |
+|-----|------|
+| `dataflow.Configuration` | `(Netlist) → Configuration` |
+| `dataflow.analyze` | `(Configuration) → Result | None` |
+| `Result.get_groups` | `() → dict[int, set[Gate]]` |
+| `Result.get_gate_predecessors` | `(Gate) → set[Gate]` |
+| `Result.get_gate_successors` | `(Gate) → set[Gate]` |
+| `Result.get_group_id_of_gate` | `(Gate) → int | None` |
+| `Result.get_gates_of_group` | `(int) → set[Gate] | None` |
+
+### solve_fsm (API 正确，需选对状态寄存器)
+
+| API | 签名 |
+|-----|------|
+| `solve_fsm.solve_fsm_brute_force` | `(Netlist, list[Gate], list[Gate]) → dict[int, dict[int, BooleanFunction]] | None` |
+| `solve_fsm.solve_fsm` | `(Netlist, list[Gate], list[Gate], initial_state=dict, timeout=600000) → dict | None` |
+| `solve_fsm.generate_dot_graph` | `(list[Gate], dict, str, max_len=128, base=10) → None` |
+
+### netlist_simulator (API 待验证)
+
+模块可导入: `NetlistSimulator`, `NetlistSimulatorPlugin`, `Simulation`
+
+### boolean_influence (未编译)
+
+当前 HAL build 不含此插件。

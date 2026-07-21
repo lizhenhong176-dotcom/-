@@ -1,42 +1,34 @@
 #!/usr/bin/env python3
 """
-HAL Simulator 插件封装。
-门级仿真、测试向量生成、覆盖率分析。
+HAL Netlist Simulator 插件封装。
+API 待验证 — 当前为 stub。
+真实模块: netlist_simulator (NetlistSimulator, Simulation)
 """
-
 from __future__ import annotations
-
-from typing import Any
 
 
 class SimulatorTool:
-    """HAL simulator 插件封装。"""
+    """HAL netlist_simulator 插件封装 (stub)。
 
-    def __init__(self, plugin_manager):
+    模块已验证可导入: NetlistSimulator, Simulation
+    API 细节待 Phase 2 后续验证后实现。
+    """
+
+    def __init__(self, plugin_manager=None):
         self._pm = plugin_manager
 
-    def simulate(self, netlist, vectors: list[dict], duration_ns: float = 100.0) -> dict:
-        """运行门级仿真。"""
-        sim = self._pm.simulator
-        sim.set_input_vectors(vectors)
-        sim.run(duration_ns)
-        return sim.get_results()
+    def simulate(self, netlist, vectors: list[dict],
+                 duration_ns: int = 100) -> dict | None:
+        """ponytail: stub — 待 netlist_simulator API 验证后实现。"""
+        raise NotImplementedError(
+            "SimulatorTool: netlist_simulator API 待验证"
+        )
 
-    def get_signal_trace(self, netlist, signal_name: str) -> list:
-        """获取信号波形。"""
-        sim = self._pm.simulator
-        return sim.get_trace(signal_name)
+    def get_signal_trace(self, netlist, signal_name: str) -> list | None:
+        raise NotImplementedError("SimulatorTool: get_signal_trace stub")
 
-    def check_toggle(self, netlist, gate_name: str) -> bool:
-        """检查门是否发生过翻转。"""
-        sim = self._pm.simulator
-        return sim.gate_toggled(gate_name)
+    def check_toggle(self, netlist, gate_name: str) -> bool | None:
+        raise NotImplementedError("SimulatorTool: check_toggle stub")
 
-    def find_idle_gates(self, netlist) -> list:
-        """查找仿真期间从未翻转的门 (可能是隐藏逻辑)。"""
-        sim = self._pm.simulator
-        idle = []
-        for gate in netlist.get_gates():
-            if not sim.gate_toggled(gate.get_name()):
-                idle.append(gate.get_name())
-        return idle
+    def find_idle_gates(self, netlist) -> list[str]:
+        raise NotImplementedError("SimulatorTool: find_idle_gates stub")
