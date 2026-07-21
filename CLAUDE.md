@@ -1,5 +1,16 @@
 # CLAUDE.md - HAL Trojan Agent 项目说明
 
+## 工具使用规范
+
+调用 Yosys / HAL / HAL Python API / HAL 插件前，**必须先查对应文档，禁止凭空猜测 API**：
+
+| 场景 | 文档 |
+|------|------|
+| Yosys 命令/综合脚本 | `docs/YOSYS_GUIDE.md` |
+| HAL 概念/工作流 | `docs/HAL_GUIDE.md` |
+| HAL Python API | `docs/HAL_PYTHON_API_GUIDE.md` |
+| HAL 插件 | `docs/HAL_PLUGIN_GUIDE.md` |
+
 ## 项目目标
 基于 HAL 框架的硬件木马自动检测系统。读取综合后的门级网表，利用 HAL 插件进行结构/功能分析，通过 LLM 驱动的策略引擎识别潜在木马。
 
