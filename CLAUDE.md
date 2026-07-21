@@ -2,14 +2,23 @@
 
 ## 工具使用规范
 
-调用 Yosys / HAL / HAL Python API / HAL 插件前，**必须先查对应文档，禁止凭空猜测 API**：
+调用 Yosys / HAL / HAL Python API / HAL 插件前，**必须先查对应文档，禁止凭空猜测 API**。
 
-| 场景 | 文档 |
+### 查找优先级
+
+1. **本地项目文档** → `docs/YOSYS_GUIDE.md`, `docs/HAL_GUIDE.md`, `docs/HAL_PYTHON_API_GUIDE.md`, `docs/HAL_PLUGIN_GUIDE.md`
+2. **HAL Core Python API 官方** → https://emsec.github.io/hal/pydoc/hal_py.html
+3. **HAL Plugins Python API 官方** → https://emsec.github.io/hal/pydoc/plugins.html
+4. **C++ Doxygen** → https://emsec.github.io/hal/doc/modules.html
+
+### 场景速查
+
+| 场景 | 首选 |
 |------|------|
 | Yosys 命令/综合脚本 | `docs/YOSYS_GUIDE.md` |
 | HAL 概念/工作流 | `docs/HAL_GUIDE.md` |
-| HAL Python API | `docs/HAL_PYTHON_API_GUIDE.md` |
-| HAL 插件 | `docs/HAL_PLUGIN_GUIDE.md` |
+| HAL Core API (Gate/Net/Module/Netlist) | `docs/HAL_PYTHON_API_GUIDE.md` → 官方 pydoc |
+| HAL 插件 API (dataflow/graph/fsm/sim) | `docs/HAL_PLUGIN_GUIDE.md` → 官方 plugins pydoc |
 
 ## 项目目标
 基于 HAL 框架的硬件木马自动检测系统。读取综合后的门级网表，利用 HAL 插件进行结构/功能分析，通过 LLM 驱动的策略引擎识别潜在木马。

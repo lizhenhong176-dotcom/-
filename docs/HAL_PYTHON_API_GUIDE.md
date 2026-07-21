@@ -2,7 +2,11 @@
 
 ## Official API Reference
 
-https://emsec.github.io/hal/doc/modules.html
+API 查找优先级：
+1. **本项目 docs/** (YOSYS_GUIDE, HAL_GUIDE, HAL_PLUGIN_GUIDE)
+2. HAL Core Python API: https://emsec.github.io/hal/pydoc/hal_py.html
+3. HAL Plugins Python API: https://emsec.github.io/hal/pydoc/plugins.html
+4. C++ Doxygen: https://emsec.github.io/hal/doc/modules.html
 
 ## 导入
 
