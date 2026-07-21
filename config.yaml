@@ -1,0 +1,55 @@
+# HAL Trojan Agent 全局配置
+
+project:
+  name: "hal_trojan_agent"
+  rtl_dir: "rtl/"
+  netlist_dir: "netlist/"
+  library_dir: "library/"
+
+hal:
+  # HAL 插件列表
+  plugins:
+    - dataflow
+    - solve_fsm
+    - graph_algorithm
+    - netlist_simulator
+    - hawkeye
+    - z3_utils
+  plugin_dir: "/home/i/hal/build/lib/hal_plugins/"
+  # 网表加载选项
+  netlist:
+    gate_library: "/usr/local/share/yosys/NangateOpenCellLibrary_typical.lib"
+    hgl: "/home/i/hal/plugins/gate_libraries/definitions/NangateOpenCellLibrary.hgl"
+
+yosys:
+  script_dir: "yosys/scripts/"
+  synth_generic: "yosys/scripts/synth_generic.tcl"
+  synth_nangate: "yosys/scripts/synth_nangate45.tcl"
+
+llm:
+  provider: "anthropic"  # anthropic | openai
+  model: "claude-sonnet-4-6"
+  temperature: 0.1
+  max_tokens: 4096
+
+strategies:
+  # 启用的检测策略
+  enabled:
+    - uart_strategy
+    - crypto_strategy
+    - fsm_strategy
+    - dataflow_strategy
+    - output_cone_strategy
+
+analysis:
+  # 分析阈值
+  fan_in_threshold: 100
+  cone_depth_threshold: 10
+  gate_count_threshold: 1000
+  register_threshold: 50
+
+experiments:
+  output_dir: "experiments/results/"
+  designs:
+    - rs232
+    - aes
